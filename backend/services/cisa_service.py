@@ -31,7 +31,7 @@ def fetch_cisa_threats():
                         'product': vuln.get('product', ''),
                         'cve_id': vuln['cveID']
                     },
-                    metadata={
+                    threat_metadata={
                         'required_action': vuln.get('requiredAction', ''),
                         'due_date': vuln.get('dueDate', ''),
                         'known_ransomware': vuln.get('knownRansomwareCampaignUse', 'Unknown')

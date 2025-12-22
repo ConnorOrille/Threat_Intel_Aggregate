@@ -39,7 +39,7 @@ class Threat(db.Model):
     severity = db.Column(db.String(20))
     confidence_score = db.Column(db.Integer)
     indicators = db.Column(db.JSON)
-    metadata = db.Column(db.JSON)
+    threat_metadata = db.Column(db.JSON)
     date_discovered = db.Column(db.DateTime)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
     is_active = db.Column(db.Boolean, default=True)
@@ -57,7 +57,7 @@ class Threat(db.Model):
             'severity': self.severity,
             'confidence_score': self.confidence_score,
             'indicators': self.indicators,
-            'metadata': self.metadata,
+            'metadata': self.threat_metadata,
             'date_discovered': self.date_discovered.isoformat() if self.date_discovered else None,
             'date_added': self.date_added.isoformat(),
             'is_active': self.is_active
