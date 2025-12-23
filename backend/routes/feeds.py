@@ -1,8 +1,9 @@
-from flask import Blueprint, jsonify
-from flask_jwt_extended import jwt_required
+from flask import Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from services.cisa_service import fetch_cisa_threats
 from services.abuseipdb_service import fetch_abuseipdb_threats
 from services.urlhaus_service import fetch_urlhaus_threats
+
 
 bp = Blueprint('feeds', __name__, url_prefix='/api/feeds')
 
@@ -10,6 +11,16 @@ bp = Blueprint('feeds', __name__, url_prefix='/api/feeds')
 @jwt_required()
 def fetch_cisa():
     """Manually trigger CISA feed fetch"""
+    print("=== CISA FETCH CALLED ===")  # Debug
+    print(f"Headers: {request.headers}")  # Debug
+    
+    try:
+        user_id = get_jwt_identity()
+        print(f"User ID: {user_id}")  # Debug
+    except Exception as e:
+        print(f"JWT Error: {str(e)}")  # Debug
+        return jsonify({'error': f'JWT Error: {str(e)}'}), 422
+    
     result = fetch_cisa_threats()
     
     if result['success']:
