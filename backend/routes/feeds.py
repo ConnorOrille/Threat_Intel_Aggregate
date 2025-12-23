@@ -15,7 +15,7 @@ def fetch_cisa():
     print(f"Headers: {request.headers}")  # Debug
     
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         print(f"User ID: {user_id}")  # Debug
     except Exception as e:
         print(f"JWT Error: {str(e)}")  # Debug

@@ -87,7 +87,7 @@ def get_threat(threat_id):
         return jsonify({'error': 'Threat not found'}), 404
     
     # Check if current user has bookmarked this threat
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     bookmark = Bookmark.query.filter_by(user_id=user_id, threat_id=threat_id).first()
     
     threat_data = threat.to_dict()
@@ -163,7 +163,7 @@ def get_stats():
 @jwt_required()
 def get_bookmarks():
     """Get all bookmarked threats for current user"""
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     
     bookmarks = Bookmark.query.filter_by(user_id=user_id).all()
     
@@ -181,7 +181,7 @@ def get_bookmarks():
 @jwt_required()
 def bookmark_threat(threat_id):
     """Bookmark a threat"""
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     
     # Check if threat exists
     threat = Threat.query.get(threat_id)
@@ -215,7 +215,7 @@ def bookmark_threat(threat_id):
 @jwt_required()
 def update_bookmark(threat_id):
     """Update bookmark notes"""
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     
     bookmark = Bookmark.query.filter_by(user_id=user_id, threat_id=threat_id).first()
     if not bookmark:
@@ -237,7 +237,7 @@ def update_bookmark(threat_id):
 @jwt_required()
 def unbookmark_threat(threat_id):
     """Remove a bookmark"""
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     
     bookmark = Bookmark.query.filter_by(user_id=user_id, threat_id=threat_id).first()
     if not bookmark:
