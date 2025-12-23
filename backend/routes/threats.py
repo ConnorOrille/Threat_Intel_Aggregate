@@ -8,8 +8,6 @@ bp = Blueprint('threats', __name__, url_prefix='/api/threats')
 
 @bp.route('/', methods=['GET'])
 @jwt_required()
-@bp.route('/', methods=['GET'])
-@jwt_required()
 def get_threats():
     """Get all threats with optional filtering"""
     try:
