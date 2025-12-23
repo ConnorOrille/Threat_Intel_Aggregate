@@ -8,17 +8,19 @@ bp = Blueprint('threats', __name__, url_prefix='/api/threats')
 
 @bp.route('/', methods=['GET'])
 @jwt_required()
+@bp.route('/', methods=['GET'])
+@jwt_required()
 def get_threats():
     """Get all threats with optional filtering"""
     try:
         # Get query parameters
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 20, type=int)
-        source = request.args.get('source')  # 'CISA', 'AbuseIPDB', etc.
-        threat_type = request.args.get('type')  # 'vulnerability', 'malicious_ip', etc.
-        severity = request.args.get('severity')  # 'low', 'medium', 'high', 'critical'
-        search = request.args.get('search')  # Search in title/description
-        days = request.args.get('days', type=int)  # Filter by last N days
+        source = request.args.get('source')
+        threat_type = request.args.get('type')
+        severity = request.args.get('severity')
+        search = request.args.get('search')
+        days = request.args.get('days', type=int)
         
         # Start with base query
         query = Threat.query.filter_by(is_active=True)
@@ -53,7 +55,14 @@ def get_threats():
         # Paginate results
         pagination = query.paginate(page=page, per_page=per_page, error_out=False)
         
-        threats = [threat.to_dict() for threat in pagination.items]
+        # Convert to dict - with error handling for each threat
+        threats = []
+        for threat in pagination.items:
+            try:
+                threats.append(threat.to_dict())
+            except Exception as e:
+                print(f"Error converting threat {threat.id}: {str(e)}")  # Debug print
+                continue  # Skip this threat and continue
         
         return jsonify({
             'threats': threats,
@@ -64,6 +73,9 @@ def get_threats():
         })
     
     except Exception as e:
+        print(f"Error in get_threats: {str(e)}")  # Debug print
+        import traceback
+        traceback.print_exc()  # Print full stack trace
         return jsonify({'error': str(e)}), 500
 
 

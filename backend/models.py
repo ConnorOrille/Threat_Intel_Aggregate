@@ -49,17 +49,17 @@ class Threat(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'threat_id': self.threat_id,
-            'source': self.source,
-            'threat_type': self.threat_type,
-            'title': self.title,
-            'description': self.description,
-            'severity': self.severity,
+            'threat_id': self.threat_id or '',
+            'source': self.source or '',
+            'threat_type': self.threat_type or '',
+            'title': self.title or '',
+            'description': self.description or '',
+            'severity': self.severity or '',
             'confidence_score': self.confidence_score,
-            'indicators': self.indicators,
-            'metadata': self.threat_metadata,
+            'indicators': self.indicators or {},
+            'metadata': self.threat_metadata or {},
             'date_discovered': self.date_discovered.isoformat() if self.date_discovered else None,
-            'date_added': self.date_added.isoformat(),
+            'date_added': self.date_added.isoformat() if self.date_added else None,
             'is_active': self.is_active
         }
 
