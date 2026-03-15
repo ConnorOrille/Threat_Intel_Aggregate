@@ -8,7 +8,6 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     
-    # Print config for debugging
     print(f"JWT_SECRET_KEY configured: {app.config.get('JWT_SECRET_KEY') is not None}")
     
     # Initialize extensions
@@ -33,14 +32,40 @@ def create_app():
     with app.app_context():
         db.create_all()
     
-    # Then import and register blueprints
-    from routes.auth import bp as auth_bp
-    from routes.threats import bp as threats_bp
-    from routes.feeds import bp as feeds_bp
+    print("\n=== Importing Blueprints ===")
     
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(threats_bp)
-    app.register_blueprint(feeds_bp)
+    try:
+        print("Importing auth...")
+        from routes.auth import bp as auth_bp
+        app.register_blueprint(auth_bp)
+        print("✓ Auth registered")
+    except Exception as e:
+        print(f"✗ Auth failed: {e}")
+    
+    try:
+        print("Importing threats...")
+        from routes.threats import bp as threats_bp
+        app.register_blueprint(threats_bp)
+        print("✓ Threats registered")
+    except Exception as e:
+        print(f"✗ Threats failed: {e}")
+    
+    try:
+        print("Importing feeds...")
+        from routes.feeds import bp as feeds_bp
+        print("Feeds blueprint imported successfully")
+        app.register_blueprint(feeds_bp)
+        print("✓ Feeds registered")
+    except Exception as e:
+        print(f"✗ Feeds failed: {e}")
+        import traceback
+        traceback.print_exc()
+    
+    print("\n=== All Registered Routes ===")
+    for rule in app.url_map.iter_rules():
+        if rule.endpoint != 'static':
+            print(f"{rule.endpoint}: {rule.rule} {list(rule.methods - {'HEAD', 'OPTIONS'})}")
+    print("=" * 40)
     
     @app.route('/')
     def index():
