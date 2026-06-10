@@ -71,7 +71,7 @@ Authorization: Bearer <access_token>
 
 ```bash
 git clone https://github.com/ConnorOrille/Threat_Intel_Aggregate.git
-cd threat-intel-aggregator/backend
+cd Threat_Intel_Aggregate/backend
 
 python -m venv venv
 source venv/bin/activate      # Windows: venv\Scripts\activate
