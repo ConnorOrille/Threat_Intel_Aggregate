@@ -70,7 +70,7 @@ Authorization: Bearer <access_token>
 ### Installation
 
 ```bash
-git clone https://github.com/yourusername/threat-intel-aggregator.git
+git clone https://github.com/ConnorOrille/Threat_Intel_Aggregate.git
 cd threat-intel-aggregator/backend
 
 python -m venv venv
